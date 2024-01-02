@@ -18,7 +18,7 @@ def gcp():
     client = language_v1.LanguageServiceClient()
 
     # The text to analyze
-    text = "I fucking love to hate you"
+    text = "I fucking hate you"
     document = language_v1.types.Document(
         content=text, type_=language_v1.types.Document.Type.PLAIN_TEXT
     )
