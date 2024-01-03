@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, jsonify
 from google.cloud import language_v1
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"])
 client = language_v1.LanguageServiceClient()
 
 @app.route('/', methods=['GET', 'POST'])
@@ -30,10 +32,10 @@ def json_example(input_param):
     response_data = {'input_param': input_param}
     return jsonify(response_data)
 
-@app.route("/gcp")
-def gcp():
+@app.route("/anal_sentiment/<input_param>")
+def gcp(input_param):
     # The text to analyze
-    text = "I love you so much"
+    text = input_param 
     document = language_v1.types.Document(
         content=text, type_=language_v1.types.Document.Type.PLAIN_TEXT
     )
@@ -43,5 +45,8 @@ def gcp():
         request={"document": document}
     ).document_sentiment
 
-    # print(f"Text: {text}")
-    return f"Sentiment: {sentiment.score}, {sentiment.magnitude}"
+    return {"sentiment": sentiment.score}
+
+@app.route("/testing_api/<param>")
+def testing_api(param):
+    return {"params": f"params: {param}"} 
